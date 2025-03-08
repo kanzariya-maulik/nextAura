@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
+const config = require("config");
 
 module.exports = async function main() {
-    await mongoose.connect("mongodb://127.0.0.1:27017/nextAura");
+    await mongoose.connect(`${config.get("MONGO_URL")}/nextAura`);
 }
