@@ -10,7 +10,7 @@ module.exports.getAllOwners = async (_req,res) => {
     }    
 }
 
-module.exports.createOwner = async (req,res) => {
+module.exports.createOwner = async (_req,res) => {
     try{
         let owners =await owner.find({});
         if(owners.length < 1){

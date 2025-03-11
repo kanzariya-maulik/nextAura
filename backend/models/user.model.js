@@ -1,4 +1,7 @@
 const mongoose = require("mongoose");
+const jwt = require("jsonwebtoken");
+const bcrypt = require("bcrypt");
+require("dotenv").config();
 
 const userSchema = mongoose.Schema({
     fullname:{
@@ -13,7 +16,6 @@ const userSchema = mongoose.Schema({
         type:Array,
         default:[],
     },
-    isAdmin:Boolean,
     orders:{
         type:Array,
         default:[],
@@ -21,10 +23,24 @@ const userSchema = mongoose.Schema({
     contact:{
         type:String,
     },
-    piture:{
+    image:{
         filename:String,
         url:String,
     },
 });
+
+userSchema.methods.generateToken = function () {
+    return jwt.sign({ email: this.email, id: this._id }, process.env.JWT_KEY);
+};
+
+userSchema.methods.hashPassword = async function (password) {
+    let salt = await bcrypt.genSalt(10);
+    return bcrypt.hash(password, salt);
+};
+
+userSchema.methods.matchPassword = function (inputPassword) {
+    return bcrypt.compareSync(inputPassword, this.password);
+};
+
 
 module.exports = mongoose.model("User",userSchema);
