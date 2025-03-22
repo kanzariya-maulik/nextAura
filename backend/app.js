@@ -6,8 +6,8 @@ const cookieParser = require("cookie-parser");
 const path = require("path");
 const main = require("./config/db.config");
 main()
-  .then(() => dbgr("connected to db"))
-  .catch((err) => dbgr(err));
+  .then(() => console.log("connected to db"))
+  .catch((err) => console.log(err));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -32,5 +32,5 @@ app.use("/users", usersRouter);
 app.use("/products", productsRouter);
 
 app.listen("8080", (req, res) => {
-  dbgr("Server is running on port 8080");
+  console.log("Server is running on port 8080");
 });

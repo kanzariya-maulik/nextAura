@@ -15,6 +15,7 @@ module.exports.getAllProducts = async (_req, res) => {
 
 module.exports.createProduct = async (req, res) => {
   try {
+    console.log(req.body);
     let result = await products.create(req.body);
     res.status(200).json({ success: true, result });
   } catch (err) {
