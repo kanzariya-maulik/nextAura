@@ -1,52 +1,37 @@
 const jwt = require("jsonwebtoken");
 const User = require("../models/user.model");
+const Product = require("../models/product.model");
 
 module.exports.addToCart = async (req, res) => {
   try {
-    // Check if token exists
-    if (!req.cookies.token) {
-      return res
-        .status(401)
-        .json({ success: false, message: "No token provided" });
-    }
-
-    // Verify the token
-    const decoded = jwt.verify(req.cookies.token, process.env.JWT_KEY);
-    const userId = decoded.id;
+    const userId = req.user.id;
     const product_id = req.body.id;
 
-    // Check if product_id exists
     if (!product_id) {
       return res
         .status(400)
         .json({ success: false, message: "Product ID is required" });
     }
 
-    // Find user in database
     const isExist = await User.findById(userId);
     if (!isExist) {
       return res.status(401).json({ success: false, message: "Unauthorized" });
     }
 
-    // Initialize the cart if undefined (Failsafe)
     if (!isExist.cart) {
       isExist.cart = [];
     }
 
-    // Find if product already exists in the cart
     const existingProduct = isExist.cart.find(
       (item) => item.product_id && item.product_id.toString() === product_id
     );
 
     if (existingProduct) {
-      // If product exists, increase quantity
       existingProduct.quantity += 1;
     } else {
-      // If product does not exist, add it to the cart
       isExist.cart.push({ product_id, quantity: 1 });
     }
 
-    // Save the updated user cart
     await isExist.save();
 
     return res.status(200).json({
@@ -57,5 +42,69 @@ module.exports.addToCart = async (req, res) => {
   } catch (error) {
     console.error("Error adding to cart:", error);
     return res.status(500).json({ success: false, message: "Server error" });
+  }
+};
+
+module.exports.getCart = async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id).populate("cart.product_id");
+    res.status(200).json(user.cart);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({
+      success: false,
+      message: "internal server error",
+    });
+  }
+};
+
+
+module.exports.deleteFromCart = async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id);
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+
+    const productId = req.params.id;
+    
+    if (!productId) {
+      return res.status(400).json({
+        success: false,
+        message: "Product ID is required",
+      });
+    }
+
+    const index = user.cart.findIndex(
+      (item) => item.product_id.toString() === productId
+    );
+
+    if (index === -1) {
+      return res.status(404).json({
+        success: false,
+        message: "Product not found in cart",
+      });
+    }
+
+    // Remove the product from the cart
+    user.cart.splice(index, 1);
+
+    // Save the updated user data
+    await user.save();
+
+    res.status(200).json({
+      success: true,
+      message: "Product removed from cart",
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({
+      success: false,
+      message: "Internal server error",
+    });
   }
 };
