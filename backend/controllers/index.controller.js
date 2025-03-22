@@ -19,9 +19,9 @@ module.exports.registerUser = async (req, res) => {
     const isProduction = process.env.NODE_ENV === "production"; // Check environment
     res.cookie("token", token, {
       httpOnly: true,
-      secure: isProduction, // Set to true in production (for HTTPS)
-      sameSite: "None", // Required for cross-origin cookies
-      maxAge: 7 * 24 * 60 * 60 * 1000, // Expires in 7 days
+      secure: isProduction,
+      sameSite: "None",
+      maxAge: 7 * 24 * 60 * 60 * 1000, 
     });
 
     delete createdUser._doc.password;
@@ -30,6 +30,7 @@ module.exports.registerUser = async (req, res) => {
       success: true,
       message: "User created successfully",
       user: createdUser,
+      token,
     });
   } catch (e) {
     console.error(e);
@@ -57,12 +58,12 @@ module.exports.loginUser = async (req, res) => {
     }
 
     let token = user.generateToken();
-    const isProduction = process.env.NODE_ENV === "production"; // Check environment
+    const isProduction = process.env.NODE_ENV === "production";
     res.cookie("token", token, {
       httpOnly: true,
-      secure: isProduction, // Set to true in production (for HTTPS)
-      sameSite: "None", // Required for cross-origin cookies
-      maxAge: 7 * 24 * 60 * 60 * 1000, // Expires in 7 days
+      secure: isProduction,
+      sameSite: "None",
+      maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
     delete user._doc.password;
@@ -70,6 +71,7 @@ module.exports.loginUser = async (req, res) => {
       success: true,
       message: "User logged in successfully",
       user: user,
+      token,
     });
   } catch (e) {
     console.error(e);
@@ -83,9 +85,9 @@ module.exports.logoutUser = async (req, res) => {
   try {
     res.cookie("token", "", {
       httpOnly: true,
-      secure: false, // You can set this to true for production
+      secure: false,
       sameSite: "None",
-      expires: new Date(0), // Expire immediately
+      expires: new Date(0),
     });
     res.status(200).json({ success: true, message: "Logout successfully" });
   } catch (e) {

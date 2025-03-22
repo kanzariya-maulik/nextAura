@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   Card,
@@ -7,10 +7,11 @@ import {
   Typography,
   Button,
 } from "@mui/material";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const ProductCard = ({ product }) => {
   const navigate = useNavigate();
-
   const handleCardClick = () => {
     navigate(`/product/${product._id}`);
   };
@@ -23,7 +24,7 @@ const ProductCard = ({ product }) => {
           "Content-Type": "application/json",
         },
         credentials: "include",
-        body: JSON.stringify(product),
+        body: JSON.stringify({ id: product._id }),
       });
 
       if (!response.ok) {

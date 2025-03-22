@@ -27,6 +27,7 @@ const Login = () => {
     try {
       const response = await fetch("http://localhost:8080/register", {
         method: "POST",
+        credentials: "include",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(registerData),
       });
@@ -49,11 +50,17 @@ const Login = () => {
     try {
       const response = await fetch("http://localhost:8080/login", {
         method: "POST",
+        credentials: "include",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(loginData),
       });
 
       const data = await response.json();
+
+      console.log(data);
+      document.cookie = `token=${data.token}; expires=${
+        new Date() * 60 * 60 * 7
+      }; path=/`;
 
       if (data.success) {
         navigate("/landing"); // Redirect if login is successful
