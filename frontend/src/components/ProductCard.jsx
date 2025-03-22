@@ -1,22 +1,25 @@
-import React, { useState } from "react";
+import React from "react";
 import { useNavigate } from "react-router-dom";
 import {
   Card,
   CardContent,
   CardMedia,
   Typography,
-  Button,
+  IconButton,
 } from "@mui/material";
+import AddCircleIcon from "@mui/icons-material/AddCircle";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const ProductCard = ({ product }) => {
   const navigate = useNavigate();
+
   const handleCardClick = () => {
     navigate(`/product/${product._id}`);
   };
 
-  async function addToCart() {
+  async function addToCart(e) {
+    e.stopPropagation();
     try {
       const response = await fetch("http://localhost:8080/users/addToCart", {
         method: "POST",
@@ -31,73 +34,101 @@ const ProductCard = ({ product }) => {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
 
-      const data = await response.json();
-      console.log("Response:", data);
+      toast.success("Added to cart successfully!", {
+        position: "bottom-right",
+        autoClose: 2000,
+      });
     } catch (error) {
+      toast.error("Failed to add to cart.");
       console.error("Error adding to cart:", error);
     }
   }
 
   return (
-    <Card
-      sx={{
-        backgroundColor: product.panelcolor,
-        color: product.textcolor,
-        borderRadius: 2,
-        boxShadow: 3,
-        display: "flex",
-        flexDirection: "column",
-        height: 450, // Fixed height for uniformity
-        cursor: "pointer",
-      }}
-      onClick={handleCardClick}
-    >
-      <CardMedia
-        component="img"
-        height="180"
-        image={product.image.url}
-        alt={product.name}
+    <>
+      <ToastContainer />
+      <Card
         sx={{
-          backgroundColor: product.bgcolor,
-          padding: 2,
-          objectFit: "contain",
-        }}
-      />
-      <CardContent
-        sx={{
-          flexGrow: 1,
+          backgroundColor: `${product.bgcolor}`, // Background color for name and price section
+          color: "white",
+          borderRadius: 2,
+          boxShadow: 4,
+          width: 200,
+          height: 300,
+          cursor: "pointer",
+          position: "relative",
           display: "flex",
           flexDirection: "column",
-          justifyContent: "space-between",
+          alignItems: "center",
+          padding: "0px",
+          overflow: "hidden",
         }}
+        onClick={handleCardClick}
       >
-        <Typography variant="h6" fontWeight="bold">
-          {product.name}
-        </Typography>
-        <Typography variant="body1" sx={{ opacity: 0.8 }}>
-          ${product.price}
-        </Typography>
-        {product.discount > 0 && (
-          <Typography
-            variant="body2"
-            sx={{ color: "red", fontWeight: "bold", mt: 1 }}
-          >
-            {product.discount}% OFF
-          </Typography>
-        )}
-        <Button
-          fullWidth
-          variant="contained"
-          sx={{ mt: 2, backgroundColor: "black", color: "white" }}
-          onClick={(e) => {
-            e.stopPropagation();
-            addToCart();
+        <div
+          style={{
+            width: "100%",
+            backgroundColor: `${product.panelcolor}`, // Light pink background for image section
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            padding: "10px 0",
           }}
         >
-          Add to Cart
-        </Button>
-      </CardContent>
-    </Card>
+          <CardMedia
+            component="img"
+            image={product.image.url}
+            alt={product.name}
+            sx={{
+              width: "80%",
+              height: "140px",
+              objectFit: "contain",
+            }}
+          />
+        </div>
+        <CardContent
+          sx={{
+            textAlign: "center",
+            padding: "10px 5px",
+            flexGrow: 1,
+            width: "100%",
+          }}
+        >
+          <Typography
+            variant="subtitle1"
+            fontWeight="bold"
+            sx={{ fontSize: "14px", color: `${product.textcolor}` }}
+          >
+            {product.name}
+          </Typography>
+          <Typography
+            variant="body2"
+            sx={{ fontSize: "14px", color: `${product.textcolor}` }}
+          >
+            ${product.price}
+          </Typography>
+        </CardContent>
+        <IconButton
+          sx={{
+            position: "absolute",
+            bottom: 10,
+            right: 10,
+            backgroundColor: "#eeeeee",
+            color: `${product.textcolor}`,
+            boxShadow: 2,
+            borderRadius: "50%",
+            padding: "5px",
+            transition: "all 0.3s ease",
+            "&:hover": {
+              backgroundColor: "#f8f8f8",
+            },
+          }}
+          onClick={addToCart}
+        >
+          <AddCircleIcon fontSize="medium" />
+        </IconButton>
+      </Card>
+    </>
   );
 };
 
