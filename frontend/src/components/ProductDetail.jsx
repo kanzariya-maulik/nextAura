@@ -1,8 +1,8 @@
 import React, { useContext, useState } from "react";
 import { useParams } from "react-router-dom";
 import { ProductsContext } from "../context/ProductContext";
-import Header from "./Header";
-import Sidebar from "./Sidebar";
+import { useNavigate } from "react-router-dom";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import {
   Typography,
   Button,
@@ -15,6 +15,8 @@ import {
 import { Add, Remove } from "@mui/icons-material";
 
 const ProductDetail = () => {
+  const navigate = useNavigate();
+
   const { id } = useParams();
   const { products, loading } = useContext(ProductsContext);
   const product = products.find((p) => p._id === id);
@@ -49,8 +51,6 @@ const ProductDetail = () => {
         p: 4,
       }}
     >
-      <Header />
-      <Sidebar />
       <Box sx={{ display: "flex", gap: 4, maxWidth: "900px", width: "100%" }}>
         <Card
           sx={{
@@ -61,6 +61,15 @@ const ProductDetail = () => {
             color: product.textcolor,
           }}
         >
+          <Button
+            variant="contained"
+            color="dark"
+            startIcon={<ArrowBackIcon />}
+            onClick={() => navigate(-1)} // Go back to the previous page
+            sx={{ marginBottom: 2 }}
+          >
+            Back
+          </Button>
           <CardMedia
             component="img"
             image={product.image.url}

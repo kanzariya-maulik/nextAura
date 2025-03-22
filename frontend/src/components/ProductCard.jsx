@@ -6,6 +6,7 @@ import {
   CardMedia,
   Typography,
   IconButton,
+  Box,
 } from "@mui/material";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import { toast, ToastContainer } from "react-toastify";
@@ -54,7 +55,7 @@ const ProductCard = ({ product }) => {
           borderRadius: 2,
           boxShadow: 4,
           width: 200,
-          height: 300,
+          height: 250,
           cursor: "pointer",
           position: "relative",
           display: "flex",
@@ -65,6 +66,28 @@ const ProductCard = ({ product }) => {
         }}
         onClick={handleCardClick}
       >
+        {/* Floating Discount Badge */}
+        {product.discount > 0 && (
+          <Box
+            sx={{
+              position: "absolute",
+              top: 0, 
+              left: "90%",
+              transform: "translateX(-50%)",
+              backgroundColor: "red",
+              color: "white",
+              padding: "5px 10px",
+              fontSize: "12px",
+              fontWeight: "bold",
+              borderRadius: "12px",
+              boxShadow: 2,
+              zIndex: 2,
+            }}
+          >
+            {product.discount}%
+          </Box>
+        )}
+
         <div
           style={{
             width: "100%",
@@ -86,6 +109,7 @@ const ProductCard = ({ product }) => {
             }}
           />
         </div>
+
         <CardContent
           sx={{
             textAlign: "center",
@@ -108,6 +132,8 @@ const ProductCard = ({ product }) => {
             ${product.price}
           </Typography>
         </CardContent>
+
+        {/* Add to Cart Button */}
         <IconButton
           sx={{
             position: "absolute",
