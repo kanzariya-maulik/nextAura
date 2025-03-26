@@ -30,6 +30,13 @@ app.use("/", indexRouter);
 app.use("/owners", ownersRouter);
 app.use("/users", usersRouter);
 app.use("/products", productsRouter);
+app.post("/payment/order", (req, res) => {
+  res.status(200).json({
+    success: true,
+    order_id: "order_9A33XWu170gUtm",
+    amount: 50000,
+  });
+});
 
 app.listen("8080", (req, res) => {
   console.log("Server is running on port 8080");

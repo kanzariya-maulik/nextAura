@@ -9,19 +9,28 @@ import {
   InputLabel,
   CircularProgress,
 } from "@mui/material";
+import { useLocation } from "react-router-dom";
+import { toast } from "react-toastify";
 import Header from "./Header";
 import Sidebar from "./Sidebar";
 import ProductCard from "./ProductCard";
 import { ProductsContext } from "../context/ProductContext";
+import { ToastContainer } from "react-toastify";
 
 const ProductsPage = () => {
+  const location = useLocation();
   const { products, loading } = useContext(ProductsContext);
   const [sortedProducts, setSortedProducts] = useState([]);
   const [sortBy, setSortBy] = useState("Popular");
 
   useEffect(() => {
+    if (location.state?.message) {
+      toast.warning(location.state.message, {
+        autoClose: 5000,
+      });
+    }
     setSortedProducts(products);
-  }, [products]);
+  }, [products, location.state]);
 
   const handleSort = (sortOption) => {
     setSortBy(sortOption);
@@ -40,64 +49,61 @@ const ProductsPage = () => {
   };
 
   return (
-    <Box sx={{ display: "flex" }}>
-      {/* Sidebar */}
-      <Sidebar />
-
-      {/* Main Content */}
-      <Box sx={{ flexGrow: 1, padding: 3 }}>
-        {/* Header */}
-        <Header />
-
-        {/* Loading State */}
-        {loading ? (
-          <Box sx={{ display: "flex", justifyContent: "center", marginTop: 4 }}>
-            <CircularProgress />
-          </Box>
-        ) : (
-          <>
-            {/* Sort Dropdown */}
+    <>
+      <ToastContainer position="top-right" autoClose={3000} />
+      <Box sx={{ display: "flex" }}>
+        <Sidebar />
+        <Box sx={{ flexGrow: 1, padding: 3 }}>
+          <Header />
+          {loading ? (
             <Box
-              sx={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-                marginY: 2,
-              }}
+              sx={{ display: "flex", justifyContent: "center", marginTop: 4 }}
             >
-              <Typography variant="h5" fontWeight="bold">
-                All Products
-              </Typography>
-              <FormControl variant="outlined" size="small">
-                <InputLabel>Sort by</InputLabel>
-                <Select
-                  value={sortBy}
-                  onChange={(e) => handleSort(e.target.value)}
-                  label="Sort by"
-                >
-                  <MenuItem value="Popular">Popular</MenuItem>
-                  <MenuItem value="Price High to Low">
-                    Price High to Low
-                  </MenuItem>
-                  <MenuItem value="Price Low to High">
-                    Price Low to High
-                  </MenuItem>
-                </Select>
-              </FormControl>
+              <CircularProgress />
             </Box>
+          ) : (
+            <>
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  marginY: 2,
+                }}
+              >
+                <Typography variant="h5" fontWeight="bold">
+                  All Products
+                </Typography>
+                <FormControl variant="outlined" size="small">
+                  <InputLabel>Sort by</InputLabel>
+                  <Select
+                    value={sortBy}
+                    onChange={(e) => handleSort(e.target.value)}
+                    label="Sort by"
+                  >
+                    <MenuItem value="Popular">Popular</MenuItem>
+                    <MenuItem value="Price High to Low">
+                      Price High to Low
+                    </MenuItem>
+                    <MenuItem value="Price Low to High">
+                      Price Low to High
+                    </MenuItem>
+                  </Select>
+                </FormControl>
+              </Box>
 
-            {/* Product Grid */}
-            <Grid container spacing={2}>
-              {sortedProducts.map((product, index) => (
-                <Grid item xs={12} sm={6} md={4} lg={3} key={index}>
-                  <ProductCard product={product} />
-                </Grid>
-              ))}
-            </Grid>
-          </>
-        )}
+              <Grid container spacing={2}>
+                {sortedProducts.map((product, index) => (
+                  <Grid item xs={12} sm={6} md={4} lg={3} key={index}>
+                    <ProductCard product={product} />
+                  </Grid>
+                ))}
+              </Grid>
+            </>
+          )}
+        </Box>
       </Box>
-    </Box>
+    </>
   );
 };
 

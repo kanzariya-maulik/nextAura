@@ -5,6 +5,7 @@ import Landing from "./components/Landing";
 import Availability from "./components/Availability";
 import Discountd from "./components/Discounted";
 import ProductDetail from "./components/ProductDetail";
+import Cart from "./components/Cart";
 
 function App() {
   return (
@@ -14,13 +15,14 @@ function App() {
           <Route path="/" element={<Login />} />
           <Route path="/landing" element={<Landing />} />
           <Route path="/products" element={<Landing />} />
-          <Route path="/cart" element={<Landing />} />
+          <Route path="/cart" element={<Cart />} />
           <Route path="/account" element={<Landing />} />
           <Route path="/new-collection" element={<Landing />} />
           <Route path="/create-product" element={<Landing />} />
           <Route path="/availability" element={<Availability />} />
           <Route path="/discount" element={<Discountd />} />
           <Route path="/product/:id" element={<ProductDetail />} />
+          <Route path="checkout" element={<Landing />} />
         </Routes>
       </Router>
     </ProductsProvider>

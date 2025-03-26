@@ -48,7 +48,13 @@ module.exports.addToCart = async (req, res) => {
 module.exports.getCart = async (req, res) => {
   try {
     const user = await User.findById(req.user.id).populate("cart.product_id");
-    res.status(200).json(user.cart);
+    res.status(200).json({
+      success: true,
+      data: user.cart,
+      userEmail: user.email,
+      name: user.fullname,
+      contact: user.contact,
+    });
   } catch (err) {
     console.log(err);
     res.status(500).json({
@@ -58,20 +64,19 @@ module.exports.getCart = async (req, res) => {
   }
 };
 
-
 module.exports.deleteFromCart = async (req, res) => {
   try {
     const user = await User.findById(req.user.id);
 
     if (!user) {
-      return res.status(404).json({
+      return res.status(401).json({
         success: false,
-        message: "User not found",
+        message: "Unauthorized",
       });
     }
 
     const productId = req.params.id;
-    
+
     if (!productId) {
       return res.status(400).json({
         success: false,
@@ -79,19 +84,19 @@ module.exports.deleteFromCart = async (req, res) => {
       });
     }
 
-    const index = user.cart.findIndex(
-      (item) => item.product_id.toString() === productId
+    const updatedCart = user.cart.filter(
+      (item) => item._id.toString() !== productId
     );
 
-    if (index === -1) {
+    if (updatedCart.length === user.cart.length) {
       return res.status(404).json({
         success: false,
         message: "Product not found in cart",
       });
     }
 
-    // Remove the product from the cart
-    user.cart.splice(index, 1);
+    // Update the user's cart with the filtered list
+    user.cart = updatedCart;
 
     // Save the updated user data
     await user.save();

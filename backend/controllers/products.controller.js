@@ -24,22 +24,6 @@ module.exports.createProduct = async (req, res) => {
   }
 };
 
-module.exports.getAvailableProducts = async (req, res) => {
-  let result = await products.find({ availability: true });
-  res.status(200).json({
-    success: true,
-    result,
-  });
-};
-
-module.exports.getDisountedProducts = async (req, res) => {
-  let result = await products.find({ discount: { $gt: 0 } });
-  res.status(200).json({
-    success: true,
-    result,
-  });
-};
-
 module.exports.deleteProduct = async (req, res) => {
   let result = await products.findByIdAndDelete(req.params.id);
   res.json(result);
