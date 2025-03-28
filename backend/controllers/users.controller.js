@@ -1,6 +1,7 @@
 const jwt = require("jsonwebtoken");
 const User = require("../models/user.model");
 const Product = require("../models/product.model");
+const userModel = require("../models/user.model");
 
 module.exports.addToCart = async (req, res) => {
   try {
@@ -147,7 +148,7 @@ module.exports.updateUserData = async (req, res) => {
         message: "User not found",
       });
     }
-    // Update USER
+    // Update User
     user.fullname = req.body.fullname;
     user.address = req.body.address;
     user.email = req.body.email;
@@ -168,3 +169,59 @@ module.exports.updateUserData = async (req, res) => {
     });
   }
 };
+
+module.exports.order = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const user = await User.findById(userId);
+
+    if (!user) {
+      return res.status(400).json({
+        success: false,
+        message: "User not found!",
+      });
+    }
+
+    const paymentId = req.body.paymentId;
+
+    if (!paymentId) {
+      return res.status(400).json({
+        success: false,
+        message: "Payment ID is required!",
+      });
+    }
+
+    if (!user.cart || user.cart.length === 0) {
+      return res.status(400).json({
+        success: false,
+        message: "Cart is empty. Cannot place an order!",
+      });
+    }
+
+    // Move cart items to orders with payment ID
+    user.orders.push({
+      items: user.cart, // Copy all cart items
+      paymentId: paymentId,
+      orderDate: new Date(),
+    });
+
+    // Empty the cart after placing the order
+    user.cart = [];
+
+    // Save updated user data
+    await user.save();
+
+    res.status(200).json({
+      success: true,
+      message: "Order placed successfully!",
+      order: user.orders[user.orders.length - 1], // Send latest order details
+    });
+  } catch (error) {
+    console.error("Order Processing Error:", error);
+    res.status(500).json({
+      success: false,
+      message: "An error occurred while placing the order.",
+    });
+  }
+};
+

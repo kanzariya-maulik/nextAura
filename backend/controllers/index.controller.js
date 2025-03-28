@@ -21,7 +21,7 @@ module.exports.registerUser = async (req, res) => {
       httpOnly: true,
       secure: isProduction,
       sameSite: "None",
-      maxAge: 7 * 24 * 60 * 60 * 1000, 
+      maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
     delete createdUser._doc.password;
@@ -47,7 +47,10 @@ module.exports.loginUser = async (req, res) => {
     if (!user) {
       return res
         .status(400)
-        .json({ success: false, message: "Invalid email or password" });
+        .json({
+          success: false,
+          message: "accoutn doesn't exist , please create account",
+        });
     }
 
     let isValidPassword = await user.matchPassword(password);

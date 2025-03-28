@@ -18,10 +18,18 @@ const userSchema = mongoose.Schema({
       quantity: { type: Number, default: 1 },
     },
   ],
-  orders: {
-    type: Array,
-    default: [],
-  },
+  orders: [
+    {
+      items: [
+        {
+          product_id: { type: mongoose.Schema.Types.ObjectId, ref: "Product" },
+          quantity: Number,
+        },
+      ],
+      paymentId: { type: String, required: true },
+      orderDate: { type: Date, default: Date.now },
+    },
+  ],
   contact: {
     type: Number,
   },
