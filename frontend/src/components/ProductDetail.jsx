@@ -126,7 +126,7 @@ const ProductDetail = () => {
                 mt: 2,
               }}
             >
-              Net Total: ${totalPrice}
+              Net Total: ₹{totalPrice}
             </Typography>
           </Card>
           <Box sx={{ flex: 1 }}>
@@ -137,19 +137,19 @@ const ProductDetail = () => {
               sx={{ display: "flex", justifyContent: "space-between", mb: 1 }}
             >
               <Typography>Total MRP</Typography>
-              <Typography>${(product.price + 20) * quantity}</Typography>
+              <Typography>₹{(product.price + 20) * quantity}</Typography>
             </Box>
             <Box
               sx={{ display: "flex", justifyContent: "space-between", mb: 1 }}
             >
               <Typography>Discount on MRP</Typography>
-              <Typography>${(product.discount || 1) * quantity}</Typography>
+              <Typography>₹{(product.discount || 1) * quantity}</Typography>
             </Box>
             <Box
               sx={{ display: "flex", justifyContent: "space-between", mb: 1 }}
             >
               <Typography>Platform Fee</Typography>
-              <Typography>${20 * quantity}</Typography>
+              <Typography>₹{20 * quantity}</Typography>
             </Box>
             <Box
               sx={{ display: "flex", justifyContent: "space-between", mb: 2 }}
@@ -167,7 +167,7 @@ const ProductDetail = () => {
               }}
             >
               <Typography variant="h6">Total Amount</Typography>
-              <Typography variant="h6">${totalPrice}</Typography>
+              <Typography variant="h6">₹{totalPrice}</Typography>
             </Box>
             <Button
               fullWidth

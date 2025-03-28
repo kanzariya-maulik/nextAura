@@ -12,7 +12,7 @@ const RazorpayPayment = ({ amount, user }) => {
     }
 
     if (!user?.contact) {
-      navigate("/landing", {
+      navigate("/account", {
         state: {
           message:
             "Mobile number is required for payment. Please update your profile.",

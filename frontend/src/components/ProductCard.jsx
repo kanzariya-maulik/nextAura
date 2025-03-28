@@ -71,7 +71,7 @@ const ProductCard = ({ product }) => {
           <Box
             sx={{
               position: "absolute",
-              top: 0, 
+              top: 0,
               left: "90%",
               transform: "translateX(-50%)",
               backgroundColor: "red",
@@ -129,7 +129,7 @@ const ProductCard = ({ product }) => {
             variant="body2"
             sx={{ fontSize: "14px", color: `${product.textcolor}` }}
           >
-            ${product.price}
+            ₹{product.price}
           </Typography>
         </CardContent>
 

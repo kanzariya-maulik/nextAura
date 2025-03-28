@@ -6,6 +6,8 @@ import Availability from "./components/Availability";
 import Discountd from "./components/Discounted";
 import ProductDetail from "./components/ProductDetail";
 import Cart from "./components/Cart";
+import Profile from "./components/Profile";
+import EditProfile from "./components/EditProfile";
 
 function App() {
   return (
@@ -16,7 +18,8 @@ function App() {
           <Route path="/landing" element={<Landing />} />
           <Route path="/products" element={<Landing />} />
           <Route path="/cart" element={<Cart />} />
-          <Route path="/account" element={<Landing />} />
+          <Route path="/account" element={<Profile />} />
+          <Route path="/account/edit" element={<EditProfile />} />
           <Route path="/new-collection" element={<Landing />} />
           <Route path="/create-product" element={<Landing />} />
           <Route path="/availability" element={<Availability />} />
