@@ -23,11 +23,16 @@ const userSchema = mongoose.Schema({
     default: [],
   },
   contact: {
+    type: Number,
+  },
+  address: {
     type: String,
   },
-  image: {
-    filename: String,
-    url: String,
+  country: {
+    type: String,
+  },
+  pinCode: {
+    type: Number,
   },
 });
 

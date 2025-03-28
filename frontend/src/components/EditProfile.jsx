@@ -8,20 +8,24 @@ import {
   Container,
 } from "@mui/material";
 import axios from "axios";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import Header from "./Header";
+import { useNavigate } from "react-router-dom";
 
 const Profile = () => {
   const [userData, setUserData] = useState(null);
   const [formData, setFormData] = useState({
-    fullName: "",
+    fullname: "",
     address: "",
     country: "",
     pinCode: "",
-    mobileNo: "",
+    contact: "",
     email: "",
   });
   const [loading, setLoading] = useState(true);
   const [updating, setUpdating] = useState(false);
+  const navigate = useNavigate();
 
   // Fetch user data from API
   useEffect(() => {
@@ -31,7 +35,10 @@ const Profile = () => {
         setUserData(response.data.data);
         setFormData(response.data.data);
       })
-      .catch((error) => console.error("Error fetching data:", error))
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+        toast.error("Failed to fetch user data!");
+      })
       .finally(() => setLoading(false));
   }, []);
 
@@ -48,14 +55,21 @@ const Profile = () => {
       .post("http://localhost:8080/users/updateUserData", formData, {
         withCredentials: true,
       })
-      .then(() => alert("Details updated successfully!"))
-      .catch((error) => alert("Failed to update details: " + error.message))
+      .then(() => {
+        toast.success("Details updated successfully!");
+        setTimeout(() => navigate("/account"), 2000); // Redirect after success
+      })
+      .catch((error) => {
+        console.error("Error updating details:", error);
+        toast.error("Failed to update details: " + error.message);
+      })
       .finally(() => setUpdating(false));
   };
 
   return (
     <>
       <Header />
+      <ToastContainer position="top-right" autoClose={3000} />
       <Container maxWidth="sm">
         <Box borderBottom={1} pb={1} mt={2}>
           <Typography variant="h6" fontWeight="bold">
@@ -72,7 +86,7 @@ const Profile = () => {
               <TextField
                 label="Full Name"
                 variant="outlined"
-                name="fullName"
+                name="fullname"
                 value={formData.fullname}
                 onChange={handleChange}
                 fullWidth
@@ -102,10 +116,10 @@ const Profile = () => {
                 fullWidth
               />
               <TextField
-                label="Mobile No"
+                label="Mobile Number"
                 variant="outlined"
-                name="mobileNo"
-                value={formData.mobileNo}
+                name="contact"
+                value={formData.contact}
                 onChange={handleChange}
                 fullWidth
               />

@@ -49,7 +49,7 @@ const Profile = () => {
   useEffect(() => {
     if (
       user &&
-      (!user.mobile || !user.fullName || !user.address || !user.email)
+      (!user.contact || !user.fullname || !user.address || !user.email)
     ) {
       toast.warn("Some profile details are missing. Please edit your profile.");
     }
@@ -157,7 +157,7 @@ const Profile = () => {
           <Divider sx={{ mb: 2 }} />
           <Box sx={{ mb: 3 }}>
             <Typography variant="body1" sx={{ mb: 1 }}>
-              <strong>Mobile No.:</strong> {user?.mobile || "N/A"}
+              <strong>Mobile No.:</strong> {user?.contact || "N/A"}
             </Typography>
             <Typography variant="body1">
               <strong>Email ID:</strong> {user?.email || "Missing"}

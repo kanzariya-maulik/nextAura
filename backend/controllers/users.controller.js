@@ -136,3 +136,35 @@ module.exports.getUserData = async (req, res) => {
     });
   }
 };
+
+module.exports.updateUserData = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+    // Update USER
+    user.fullname = req.body.fullname;
+    user.address = req.body.address;
+    user.email = req.body.email;
+    user.country = req.body.country;
+    user.pinCode = req.body.pinCode;
+    user.contact = req.body.contact;
+
+    const updatedUser = await user.save();
+    res.status(200).json({
+      success: true,
+      data: updatedUser,
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({
+      success: false,
+      message: "internal server error",
+    });
+  }
+};
