@@ -225,3 +225,30 @@ module.exports.order = async (req, res) => {
   }
 };
 
+module.exports.getOrders = async (req, res) => {
+  const userId = req.user.id;
+  try {
+    const user = await User.findById(userId).populate({
+      path: "orders.items.product_id",
+      model: "Product",
+      select: "name price image", // Fetch only required fields
+    });
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found!",
+      });
+    }
+    res.status(200).json({
+      success: true,
+      orders: user.orders,
+    });
+  } catch (error) {
+    console.error("Error fetching orders:", error);
+    res.status(500).json({
+      success: false,
+      message: "An error occurred while fetching orders.",
+    });
+  }
+};

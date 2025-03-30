@@ -30,10 +30,6 @@ const RazorpayPayment = ({ amount, user }) => {
       image:
         "https://as1.ftcdn.net/v2/jpg/03/08/11/28/1000_F_308112817_S9VzVCtjEqB1BfUtGaYDaUW0zteUfk7x.jpg",
       handler: async function (response) {
-        alert(
-          `Payment successful! Payment ID: ${response.razorpay_payment_id}`
-        );
-
         try {
           const res = await fetch("http://localhost:8080/users/order", {
             method: "POST",
@@ -50,7 +46,7 @@ const RazorpayPayment = ({ amount, user }) => {
           console.log("Order Response:", data);
 
           if (res.ok) {
-            navigate("/landing"); 
+            navigate("/landing");
           } else {
             alert("Payment successful, but order update failed.");
           }

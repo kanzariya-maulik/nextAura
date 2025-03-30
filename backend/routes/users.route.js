@@ -9,5 +9,6 @@ router.delete("/cart/:id", isAuthenticated, usersController.deleteFromCart);
 router.get("/getUserData", isAuthenticated, usersController.getUserData);
 router.post("/updateUserData", isAuthenticated, usersController.updateUserData);
 router.post("/order", isAuthenticated, usersController.order);
+router.get("/getOrders", isAuthenticated, usersController.getOrders);
 
 module.exports = router;
