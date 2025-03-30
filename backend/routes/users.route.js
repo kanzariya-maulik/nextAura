@@ -10,5 +10,6 @@ router.get("/getUserData", isAuthenticated, usersController.getUserData);
 router.post("/updateUserData", isAuthenticated, usersController.updateUserData);
 router.post("/order", isAuthenticated, usersController.order);
 router.get("/getOrders", isAuthenticated, usersController.getOrders);
+router.post("/changePassword", isAuthenticated, usersController.changePassword);
 
 module.exports = router;

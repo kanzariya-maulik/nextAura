@@ -1,8 +1,5 @@
-const jwt = require("jsonwebtoken");
 const User = require("../models/user.model");
-const Product = require("../models/product.model");
-const userModel = require("../models/user.model");
-
+const bcrypt = require("bcrypt");
 module.exports.addToCart = async (req, res) => {
   try {
     const userId = req.user.id;
@@ -249,6 +246,34 @@ module.exports.getOrders = async (req, res) => {
     res.status(500).json({
       success: false,
       message: "An error occurred while fetching orders.",
+    });
+  }
+};
+
+module.exports.changePassword = async (req, res) => {
+  const userId = req.user.id;
+  const { oldPassword, newPassword } = req.body;
+  try {
+    const user = await User.findById(userId);
+    const isValidPassword = await bcrypt.compare(oldPassword, user.password);
+    if (!isValidPassword) {
+      return res.status(401).json({
+        success: false,
+        message: "Invalid old password.",
+      });
+    }
+    const hashedNewPassword = await bcrypt.hash(newPassword, 10);
+    user.password = hashedNewPassword;
+    await user.save();
+    res.status(200).json({
+      success: true,
+      message: "Password changed successfully.",
+    });
+  } catch (error) {
+    console.error("Error changing password:", error);
+    res.status(500).json({
+      success: false,
+      message: "An error occurred while changing password.",
     });
   }
 };
