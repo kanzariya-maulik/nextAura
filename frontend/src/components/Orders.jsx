@@ -109,7 +109,7 @@ const Orders = () => {
                           {item.product_id.name}
                         </Typography>
                         <Typography variant="body1">
-                          ${item.product_id.price / 100} {/* Updated price */}
+                          ${item.product_id.price} {/* Updated price */}
                         </Typography>
                       </Box>
                     </Box>
