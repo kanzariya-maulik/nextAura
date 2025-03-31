@@ -27,7 +27,13 @@ const userSchema = mongoose.Schema({
         },
       ],
       paymentId: { type: String, required: true },
+      amount:Number,
       orderDate: { type: Date, default: Date.now },
+      status: {
+        type: String,
+        default: "Pending",
+        enum: ["Pending", "Confirmed", "Shipped", "Delivered", "Cancelled"],
+      },
     },
   ],
   contact: {

@@ -1,5 +1,6 @@
 const userModel = require("../models/user.model");
 const bcrypt = require("bcrypt");
+const ownerModel = require("../models/owner.model");
 
 module.exports.registerUser = async (req, res) => {
   try {
@@ -44,20 +45,26 @@ module.exports.loginUser = async (req, res) => {
   try {
     let { email, password } = req.body;
     let user = await userModel.findOne({ email });
+    let isOwner = false;
+
     if (!user) {
-      return res
-        .status(400)
-        .json({
-          success: false,
-          message: "accoutn doesn't exist , please create account",
-        });
+      user = await ownerModel.findOne({ email });
+      isOwner = !!user;
+    }
+
+    if (!user) {
+      return res.status(400).json({
+        success: false,
+        message: "Account doesn't exist, please create an account",
+      });
     }
 
     let isValidPassword = await user.matchPassword(password);
     if (!isValidPassword) {
-      return res
-        .status(400)
-        .json({ success: true, message: "Invalid email or password" });
+      return res.status(400).json({
+        success: false,
+        message: "Invalid email or password",
+      });
     }
 
     let token = user.generateToken();
@@ -72,15 +79,18 @@ module.exports.loginUser = async (req, res) => {
     delete user._doc.password;
     res.status(200).json({
       success: true,
-      message: "User logged in successfully",
-      user: user,
+      message: isOwner
+        ? "Owner logged in successfully"
+        : "User logged in successfully",
+      user,
       token,
+      role: isOwner ? "owner" : "user",
     });
   } catch (e) {
     console.error(e);
     return res
-      .status(400)
-      .json({ success: false, message: "Error logging in user" });
+      .status(500)
+      .json({ success: false, message: "Error logging in" });
   }
 };
 

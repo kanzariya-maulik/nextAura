@@ -10,6 +10,9 @@ import Profile from "./components/Profile";
 import EditProfile from "./components/EditProfile";
 import Orders from "./components/Orders.jsx";
 import ChangePassword from "./components/changePassword.jsx";
+import Admin from "./admin/AdminLanding.jsx";
+import ManageProducts from "./admin/ManageProduct.jsx";
+import EditProduct from "./admin/EditProduct.jsx";
 
 function App() {
   return (
@@ -31,6 +34,10 @@ function App() {
           <Route path="/account/orders" element={<Orders />} />
           <Route path="/account/changepassword" element={<ChangePassword />} />
           {/* admin */}
+          <Route path="/admin" element={<Admin />} />
+          <Route path="/admin/products" element={<ManageProducts />} />
+          <Route path="/admin/products/edit/:id" element={<EditProduct />} />
+
           <Route path="/create-product" element={<Landing />} />
         </Routes>
       </Router>

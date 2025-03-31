@@ -63,7 +63,13 @@ const Login = () => {
       }; path=/`;
 
       if (data.success) {
-        navigate("/landing"); // Redirect if login is successful
+        console.log(data.role);
+
+        if (data.role == "owner") {
+          navigate("/admin");
+        } else {
+          navigate("/landing");
+        }
       } else {
         setErrorMessage(data.message || "Invalid credentials.");
       }

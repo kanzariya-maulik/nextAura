@@ -200,6 +200,7 @@ module.exports.order = async (req, res) => {
       items: user.cart, // Copy all cart items
       paymentId: paymentId,
       orderDate: new Date(),
+      amount: req.body.amount,
     });
 
     // Empty the cart after placing the order

@@ -39,6 +39,7 @@ const RazorpayPayment = ({ amount, user }) => {
             },
             body: JSON.stringify({
               paymentId: response.razorpay_payment_id,
+              amount,
             }),
           });
 

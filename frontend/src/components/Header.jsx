@@ -11,7 +11,7 @@ const Header = () => {
   return (
     <AppBar position="static" color="transparent" elevation={0}>
       <Toolbar sx={{ justifyContent: "space-between" }}>
-        {location.pathname.startsWith("/account/") ? (
+        {location.pathname.startsWith("/account/")  ? (
           <Box
             sx={{
               display: "flex",
