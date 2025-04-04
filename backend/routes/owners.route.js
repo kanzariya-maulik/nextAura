@@ -21,4 +21,6 @@ router.put("/orders/:id/status", async (req, res) => {
   }
 });
 
+router.get("/getOrders", ownerController.getOrders);
+
 module.exports = router;

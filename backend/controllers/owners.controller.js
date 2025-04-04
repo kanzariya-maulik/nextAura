@@ -87,3 +87,24 @@ module.exports.getSummary = async (req, res) => {
     },
   });
 };
+
+module.exports.getOrders = async (req, res) => {
+  try {
+    const allOrders = await userModel.find().select("orders").populate({
+      path: "orders.items.product_id",
+      model: "Product",
+      select: "-__v", // Exclude only __v field, include everything else
+    });
+
+    res.status(200).json({
+      success: true,
+      data: allOrders.map((user) => user.orders).flat(), // Flatten the orders array
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Error fetching orders",
+      error: error.message,
+    });
+  }
+};

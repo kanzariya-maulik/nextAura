@@ -4,6 +4,7 @@ const dbgr = require("debug")("development:main");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const path = require("path");
+
 const main = require("./config/db.config");
 main()
   .then(() => console.log("connected to db"))
