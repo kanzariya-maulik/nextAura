@@ -16,6 +16,8 @@ import EditProduct from "./admin/EditProduct.jsx";
 import Manageorders from "./admin/ManageOrders.jsx";
 import AddProduct from "./admin/AddProduct.jsx";
 import { ToastContainer } from "react-toastify";
+import ManageUsers from "./admin/ManageUsers.jsx";
+import EditUser from "./admin/EditUser.jsx";
 
 function App() {
   return (
@@ -45,10 +47,11 @@ function App() {
             <Route path="/admin" element={<Admin />} />
             <Route path="/admin/products" element={<ManageProducts />} />
             <Route path="/admin/products/edit/:id" element={<EditProduct />} />
+            <Route path="/admin/products/add" element={<AddProduct />} />
             <Route path="/create-product" element={<Landing />} />
             <Route path="admin/orders" element={<Manageorders />} />
-            <Route path="/admin/products/add" element={<AddProduct />} />
-            <Route path="/admin/users" element={<AddProduct />} />
+            <Route path="/admin/users" element={<ManageUsers />} />
+            <Route path="/admin/users/edit/:id" element={<EditUser />} />
           </Routes>
         </Router>
       </ProductsProvider>

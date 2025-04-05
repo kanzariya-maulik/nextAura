@@ -11,6 +11,18 @@ module.exports.getAllOwners = async (_req, res) => {
   }
 };
 
+module.exports.getAllUsers = async (_req, res) => {
+  try {
+    const result = await userModel.find({});
+    return res.status(200).json(result);
+  } catch (err) {
+    console.log(err);
+    return res
+      .status(500)
+      .json({ success: false, message: "Not able to fetch Users Data" });
+  }
+};
+
 module.exports.createOwner = async (req, res) => {
   try {
     const { email, fullname, password } = req.body;
@@ -60,6 +72,55 @@ module.exports.getUser = async (_req, res) => {
   }
 };
 
+module.exports.getUserById = async (req, res) => {
+  const id = req.params.id;
+  try {
+    const user = await userModel.findById(id);
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+    return res.status(200).json(user);
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({
+      success: false,
+      message: "internal server error",
+    });
+  }
+};
+
+module.exports.editUserById = async (req, res) => {
+  try {
+    const userId = req.params.id;
+    const user = await userModel.findById(userId);
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+    // Update User
+    user.fullname = req.body.fullname;
+    user.address = req.body.address;
+    user.email = req.body.email;
+    user.country = req.body.country;
+    user.pinCode = req.body.pinCode;
+    user.contact = req.body.contact;
+
+    const updatedUser = await user.save();
+    res.status(200).json({
+      success: true,
+      data: updatedUser,
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({
+      success: false,
+      message: "internal server error",
+    });
+  }
+};
+
 module.exports.getSummary = async (req, res) => {
   const allUsers = await userModel.find().populate({
     path: "orders.items.product_id",
@@ -105,6 +166,31 @@ module.exports.getOrders = async (req, res) => {
       success: false,
       message: "Error fetching orders",
       error: error.message,
+    });
+  }
+};
+
+module.exports.deleteUserById = async (req, res) => {
+  const id = req.params.id;
+  try {
+    const user = await userModel.findById(id);
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+    await userModel.findByIdAndDelete(id);
+    res.status(200).json({
+      success: true,
+      message: "User deleted successfully",
+    });
+  } catch (error) {
+    console.log(error);
+
+    res.status(500).json({
+      success: false,
+      message: "internal server error",
     });
   }
 };

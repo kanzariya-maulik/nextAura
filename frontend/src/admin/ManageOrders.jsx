@@ -45,7 +45,7 @@ const ManageOrders = () => {
   // Handle status change
   const updateStatus = async (orderId, newStatus) => {
     try {
-      await axios.put(`http://localhost:5000/api/orders/${orderId}`, {
+      await axios.put(`http://localhost:8080/owners/orders/${orderId}/status`, {
         status: newStatus,
       });
       setOrders((prevOrders) =>

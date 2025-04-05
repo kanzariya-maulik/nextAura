@@ -14,6 +14,7 @@ import { Link } from "react-router-dom";
 
 const Orders = () => {
   const [orders, setOrders] = useState([]);
+  console.log(orders);
 
   useEffect(() => {
     fetch("http://localhost:8080/users/getOrders", {
@@ -80,10 +81,6 @@ const Orders = () => {
             {orders.length > 0 ? (
               orders.map((order, index) => (
                 <Box key={index} mb={3}>
-                  <Typography variant="h6" fontWeight="bold">
-                    Order Date: {new Date(order.orderDate).toLocaleDateString()}
-                  </Typography>
-                  <Divider sx={{ my: 1 }} />
                   {order.items.map((item, itemIndex) => (
                     <Box
                       key={itemIndex}
@@ -111,6 +108,7 @@ const Orders = () => {
                         <Typography variant="body1">
                           ${item.product_id.price} {/* Updated price */}
                         </Typography>
+                        <Typography variant="body2">{order.status}</Typography>
                       </Box>
                     </Box>
                   ))}
