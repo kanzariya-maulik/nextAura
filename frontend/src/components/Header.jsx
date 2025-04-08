@@ -1,17 +1,31 @@
-import React from "react";
-import { AppBar, Toolbar, Typography, Box, Button } from "@mui/material";
-import { InputBase } from "@mui/material";
+import React, { useState } from "react";
+import {
+  AppBar,
+  Toolbar,
+  Typography,
+  Box,
+  Button,
+  InputBase,
+} from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
-import { Link } from "react-router-dom"; // Import Link from react-router-dom
-import { useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
 const Header = () => {
+  const navigate = useNavigate();
   const location = useLocation();
+  const [search, setSearch] = useState("");
+
+  const handleSearch = () => {
+    if (search.trim()) {
+      navigate(`/search?query=${encodeURIComponent(search.trim())}`);
+    }
+  };
 
   return (
     <AppBar position="static" color="transparent" elevation={0}>
       <Toolbar sx={{ justifyContent: "space-between" }}>
-        {location.pathname.startsWith("/account/")  ? (
+        {location.pathname.startsWith("/account") ||
+        location.pathname.startsWith("/search") ? (
           <Box
             sx={{
               display: "flex",
@@ -43,6 +57,13 @@ const Header = () => {
             <InputBase
               placeholder="In Search Of Something ?"
               sx={{ flex: 1, fontSize: "16px" }}
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  handleSearch();
+                }
+              }}
             />
           </Box>
         )}

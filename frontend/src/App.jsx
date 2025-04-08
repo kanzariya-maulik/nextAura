@@ -18,7 +18,7 @@ import AddProduct from "./admin/AddProduct.jsx";
 import { ToastContainer } from "react-toastify";
 import ManageUsers from "./admin/ManageUsers.jsx";
 import EditUser from "./admin/EditUser.jsx";
-
+import Search from "./components/Search.jsx";
 function App() {
   return (
     <>
@@ -52,6 +52,8 @@ function App() {
             <Route path="admin/orders" element={<Manageorders />} />
             <Route path="/admin/users" element={<ManageUsers />} />
             <Route path="/admin/users/edit/:id" element={<EditUser />} />
+            {/* search */}
+            <Route path="/search" element={<Search />} />
           </Routes>
         </Router>
       </ProductsProvider>
