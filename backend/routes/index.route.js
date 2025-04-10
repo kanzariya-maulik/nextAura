@@ -8,4 +8,7 @@ router.post("/register", indexController.registerUser);
 router.post("/login", indexController.loginUser);
 
 router.get("/logout", isAuthenticated, indexController.logoutUser);
+
+router.post("/forgetpassword", indexController.forgetPassword);
+router.post("/resetpassword", indexController.resetPassword);
 module.exports = router;

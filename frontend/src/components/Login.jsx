@@ -9,7 +9,7 @@ import {
   Divider,
   Alert,
 } from "@mui/material";
-import { useNavigate } from "react-router-dom"; // For navigation
+import { Link, useNavigate } from "react-router-dom"; // For navigation
 
 const Login = () => {
   const [registerData, setRegisterData] = useState({
@@ -214,7 +214,7 @@ const Login = () => {
           variant="body2"
           sx={{ textDecoration: "underline", cursor: "pointer", color: "#666" }}
         >
-          Forgot Password?
+          <Link to="/forgetPassword">Forgot Password?</Link>
         </Typography>
       </Grid>
     </Grid>

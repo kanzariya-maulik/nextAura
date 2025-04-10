@@ -19,6 +19,8 @@ import { ToastContainer } from "react-toastify";
 import ManageUsers from "./admin/ManageUsers.jsx";
 import EditUser from "./admin/EditUser.jsx";
 import Search from "./components/Search.jsx";
+import ForgetPassword from "./components/ForgetPassword.jsx";
+import ResetPassword from "./components/ResetPassword.jsx";
 function App() {
   return (
     <>
@@ -35,6 +37,8 @@ function App() {
             <Route path="/discount" element={<Discountd />} />
             <Route path="/product/:id" element={<ProductDetail />} />
             <Route path="/new-collection" element={<Landing />} />
+            <Route path="/forgetPassword" element={<ForgetPassword />} />
+            <Route path="/reset-password/:token" element={<ResetPassword />} />
             {/* account */}
             <Route path="/account" element={<Profile />} />
             <Route path="/account/edit" element={<EditProfile />} />
